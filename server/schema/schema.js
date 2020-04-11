@@ -5,7 +5,8 @@ const {
     GraphQLObjectType, 
     GraphQLString,
     GraphQLSchema,
-    GraphQLID
+    GraphQLID,
+    GraphQLInt
     } = graphql
 
 //this schema file has 3 responsiblities
@@ -20,6 +21,13 @@ const books = [
  {name:'Harry Potter 3', genre:'fantasy', id:'3'}
 ]
 
+//dummy data
+const authors = [
+    {name: 'Muhammed O.', age:43, id: '1'},
+    {name: 'Muhammed A.', age:34, id: '2'},
+    {name: 'Muhammed Y.', age:33, id: '3'}
+]
+
 //types
 const BookType = new GraphQLObjectType({
  name: 'Book',
@@ -27,6 +35,15 @@ const BookType = new GraphQLObjectType({
   id: { type: GraphQLID },
   name: { type: GraphQLString },
   genre: { type: GraphQLString }
+ })
+})
+
+const AuthorType = new GraphQLObjectType({
+ name: 'Author',
+ fields: () => ({
+  id: { type: GraphQLID },
+  name: { type: GraphQLString },
+  age: { type: GraphQLInt }
  })
 })
 
@@ -42,6 +59,13 @@ const RootQuery = new GraphQLObjectType({
     // code to get data from dB/other source.
     return _.find(books, {id: args.id})
    }
+  },
+  author:{
+    type: AuthorType,
+    args: {id : {type: GraphQLID}},
+    resolve(parent, args){
+     return _.find(authors, {id:args.id})
+    } 
   }
  }
 })
