@@ -7,7 +7,8 @@ const schema = require('./schema/schema')
 //{} takes in the Schema
 //a Schema describes what the data on our grapgh will look like.
 app.use('/graphql', graphqlHTTP({
- schema
+ schema,
+ graphiql: true
 }))
 
 const PORT = 4000
