@@ -6,7 +6,8 @@ const {
     GraphQLString,
     GraphQLSchema,
     GraphQLID,
-    GraphQLInt
+    GraphQLInt,
+    GraphQLList
     } = graphql
 
 //this schema file has 3 responsiblities
@@ -18,7 +19,10 @@ const {
 const books = [
  {name:'Harry Potter 1', genre:'fiction', id:'1', authorId:'1'},
  {name:'Harry Potter 2', genre:'fiction', id:'2', authorId:'2'},
- {name:'Harry Potter 3', genre:'fantasy', id:'3', authorId:'3'}
+ {name:'Harry Potter 3', genre:'fantasy', id:'3', authorId:'3'},
+ {name:'Harry Potter 4', genre:'fantasy', id:'3', authorId:'2'},
+ {name:'Harry Potter 5', genre:'fantasy', id:'3', authorId:'3'},
+ {name:'Harry Potter 6', genre:'fantasy', id:'3', authorId:'3'}
 ]
 
 //dummy data
@@ -49,7 +53,13 @@ const AuthorType = new GraphQLObjectType({
  fields: () => ({
   id: { type: GraphQLID },
   name: { type: GraphQLString },
-  age: { type: GraphQLInt }
+  age: { type: GraphQLInt },
+  books:{
+    type: new GraphQLList(BookType),
+    resolve(parent, args){
+      return _.filter(books, { authorId:parent.id})
+    }
+  }
  })
 })
 
