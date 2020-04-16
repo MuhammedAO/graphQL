@@ -12,13 +12,13 @@ const {
 //this schema file has 3 responsiblities
 //define types e.g BookType
 //define relationships between types
-//define root queries which describes how a user can initally just into the graph and grab data.
+//define root queries which describes how a user can initally jump into the graph and grab data.
 
 //dummy data
 const books = [
- {name:'Harry Potter 1', genre:'fiction', id:'1'},
- {name:'Harry Potter 2', genre:'fiction', id:'2'},
- {name:'Harry Potter 3', genre:'fantasy', id:'3'}
+ {name:'Harry Potter 1', genre:'fiction', id:'1', authorId:'1'},
+ {name:'Harry Potter 2', genre:'fiction', id:'2', authorId:'2'},
+ {name:'Harry Potter 3', genre:'fantasy', id:'3', authorId:'3'}
 ]
 
 //dummy data
@@ -34,7 +34,13 @@ const BookType = new GraphQLObjectType({
  fields: () => ({
   id: { type: GraphQLID },
   name: { type: GraphQLString },
-  genre: { type: GraphQLString }
+  genre: { type: GraphQLString },
+  author:{
+    type: AuthorType,
+    resolve(parent, args){
+        return _.find(authors, {id: parent.authorId})
+    }
+  }
  })
 })
 
