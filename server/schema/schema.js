@@ -1,5 +1,8 @@
 const graphql = require('graphql')
 const  _  =  require ('lodash')
+const Book = require('../models/book')
+const Author = require('../models/author')
+
 
 const { 
     GraphQLObjectType, 
@@ -15,22 +18,7 @@ const {
 //define relationships between types
 //define root queries which describes how a user can initally jump into the graph and grab data.
 
-//dummy data
-const books = [
- {name:'Harry Potter 1', genre:'fiction', id:'1', authorId:'1'},
- {name:'Harry Potter 2', genre:'fiction', id:'2', authorId:'2'},
- {name:'Harry Potter 3', genre:'fantasy', id:'3', authorId:'3'},
- {name:'Harry Potter 4', genre:'fantasy', id:'3', authorId:'2'},
- {name:'Harry Potter 5', genre:'fantasy', id:'3', authorId:'3'},
- {name:'Harry Potter 6', genre:'fantasy', id:'3', authorId:'3'}
-]
 
-//dummy data
-const authors = [
-    {name: 'Muhammed O.', age:43, id: '1'},
-    {name: 'Muhammed A.', age:34, id: '2'},
-    {name: 'Muhammed Y.', age:33, id: '3'}
-]
 
 //types
 const BookType = new GraphQLObjectType({
@@ -42,7 +30,7 @@ const BookType = new GraphQLObjectType({
   author:{
     type: AuthorType,
     resolve(parent, args){
-        return _.find(authors, {id: parent.authorId})
+        // return _.find(authors, {id: parent.authorId})
     }
   }
  })
@@ -57,7 +45,7 @@ const AuthorType = new GraphQLObjectType({
   books:{
     type: new GraphQLList(BookType),
     resolve(parent, args){
-      return _.filter(books, { authorId:parent.id})
+      // return _.filter(books, { authorId:parent.id})
     }
   }
  })
@@ -73,14 +61,14 @@ const RootQuery = new GraphQLObjectType({
    args: { id: { type: GraphQLID } },
    resolve(parent, args) {
     // code to get data from dB/other source.
-    return _.find(books, {id: args.id})
+    // return _.find(books, {id: args.id})
    }
   },
   author:{
     type: AuthorType,
     args: {id : {type: GraphQLID}},
     resolve(parent, args){
-     return _.find(authors, {id:args.id})
+    //  return _.find(authors, {id:args.id})
     } 
   },
   books:{
