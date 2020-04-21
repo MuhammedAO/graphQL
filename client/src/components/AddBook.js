@@ -35,7 +35,13 @@ const AddBook = (props) => {
   const submitForm = e => {
    e.preventDefault();
   //  console.log(formData);
-   props.addBookMutation()
+   props.addBookMutation({
+     variables: {
+       name,
+       genre,
+       authorId
+     }
+   })
   }
 
   return (
