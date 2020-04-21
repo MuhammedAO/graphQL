@@ -1,12 +1,12 @@
+
 import React,{useState} from 'react'
-import {compose} from 'redux'
-import { graphql} from 'react-apollo'
+import {useQuery, useMutation} from '@apollo/react-hooks'
 import {getAuthorsQuery, addBookMutation} from './queries/query'
 
 
 
 
-const AddBook = (props) => {
+const AddBook = () => {
   
   const [formData, setFormData] = useState({
     name:'',
@@ -16,26 +16,19 @@ const AddBook = (props) => {
 
   const {name, genre, authorId} = formData
   const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value})
-
- const displayAuthors = () => {
-   let data = props.getAuthorsQuery
    
-  //  console.log(props);
-   const {loading} = data
+  const { loading, error, data } = useQuery(getAuthorsQuery)
+  const [] =  useMutation(addBookMutation)
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{`Error: ${error.message}`}</p>;
 
-   if(loading){
-   return (<option>Loading Authors</option>) 
-   } else{
-      return data.authors.map(author => {
-       return (<option key={author.id} value={author.id}>{author.name}</option>)
-      })
-   }
-  }
+  // console.log(data);
+  
 
   const submitForm = e => {
    e.preventDefault();
-  //  console.log(formData);
-   props.addBookMutation()
+   console.log(formData);
+   
   }
 
   return (
@@ -68,7 +61,9 @@ const AddBook = (props) => {
         onChange={e => onChange(e)}
         >
         <option>Select Author</option>
-        {displayAuthors()}
+         {data.authors.map(author => (
+          <option key={author.id} value={author.id}>{author.name}</option>
+         ))}
         </select>
       </div>
         
@@ -78,10 +73,4 @@ const AddBook = (props) => {
   )
 }
 
-// export default graphql(getAuthorsQuery)(AddBook)
-
-export default compose(
-  graphql(getAuthorsQuery, {name: "getAuthorsQuery"}),
-  graphql(addBookMutation, {name:"addBookMutation"})
-)(AddBook)
-
+export default AddBook
